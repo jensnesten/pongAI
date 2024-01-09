@@ -226,21 +226,7 @@ while True:
                 future_ball_y = -290 + bounce
 
         return future_ball_y
-        
-
-        # AI Player
-    if ball.dx > 0:  # ball is moving towards paddle B
-        future_ball_y = predict_ball_position(ball)
-        if paddle_b.ycor() < future_ball_y and paddle_b.ycor() < 250:  # Add boundary condition
-            paddle_b.sety(paddle_b.ycor() + 10)
-        elif paddle_b.ycor() > future_ball_y and paddle_b.ycor() > -250:  # Add boundary condition
-            paddle_b.sety(paddle_b.ycor() - 10)
-    elif ball.dx < 0:  # ball is moving towards paddle A
-        future_ball_y = predict_ball_position(ball)
-        if paddle_a.ycor() < future_ball_y and paddle_a.ycor() < 250:  # Add boundary condition
-            paddle_a.sety(paddle_a.ycor() + 10)
-        elif paddle_a.ycor() > future_ball_y and paddle_a.ycor() > -250:  # Add boundary condition
-            paddle_a.sety(paddle_a.ycor() - 10)
+    
 
     # Missed ball paddle_b
     if ball.xcor() > 390:
