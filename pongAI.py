@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 import random
 import random
+from math import sin, cos, radians
 import math
 
 
@@ -12,8 +13,8 @@ wn.bgcolor("black")
 wn.setup(width=800, height=600)
 wn.tracer(0)
 
-initial_dx = 3
-initial_dy = -3
+initial_dx = 4
+initial_dy = -4
 
 #score
 score_a = 0
@@ -58,15 +59,16 @@ ball.dx = initial_dx * random.choice([1, -1])  # Randomize initial direction
 ball.dy = initial_dy * random.choice([1, -1])
 
 
+
 start_angle_deg = 23
 start_angle_rad = math.radians(start_angle_deg)
 
-initial_dx = 3 * math.cos(start_angle_rad)
-initial_dy = 3 * math.sin(start_angle_rad)
+initial_dx = 5 * math.cos(start_angle_rad)
+initial_dy = 5 * math.sin(start_angle_rad)
 
 # Randomize initial direction
-ball.dx = initial_dx * random.choice([1, -1])
-ball.dy = initial_dy * random.choice([1, -1])
+ball.dx = initial_dx * math.cos(random.choice([1, -1]))
+ball.dy = initial_dy * math.sin(random.choice([1, -1]))
 
 
 #pen
@@ -77,7 +79,6 @@ pen.penup()
 pen.hideturtle() #hides the turtle
 pen.goto(0,260)
 pen.write("Player A: 0 Player B: 0", align="center", font=("Courier",24,"normal"))
-
 
 
 #functions
@@ -105,6 +106,7 @@ def paddle_b_down():
         y -= 5
         paddle_b.sety(y)
 paddle_b.goto(350, 0)
+
 #keyboard binding
 wn.listen() #listen for keyboard input
 wn.onkeypress(paddle_a_up,"w") #when user presses w, call function paddle_a_up
@@ -182,6 +184,7 @@ while True:
         paddle_b_up()
     if paddle_b_down_key:
         paddle_b_down()
+
     #border checking
     if ball.ycor() > 290: #top border
         ball.sety(290)
@@ -198,6 +201,7 @@ while True:
         score_a += 1
         pen.clear() #clears the previous score
         pen.write("Player A: {} Player B: {}".format(score_a,score_b), align="center", font=("Courier",24,"normal"))
+
     if ball.xcor() < -390: #left border
         ball.goto(0,0)
         ball.dx = -initial_dx * random.choice([1, -1])  # Reset ball speed
@@ -205,17 +209,19 @@ while True:
         score_b += 1
         pen.clear() #clears the previous score
         pen.write("Player A: {} Player B: {}".format(score_a,score_b), align="center", font=("Courier",24,"normal"))
+
     #paddle and ball collisions
-    if (ball.dx > 0) and (350 > ball.xcor() > 340) and (paddle_b.ycor() + 65 > ball.ycor() > paddle_b.ycor() - 65):
+    if (ball.dx > 0) and (350 > ball.xcor() > 340) and (paddle_b.ycor() + 50 > ball.ycor() > paddle_b.ycor() - 50):
         ball.color("blue")
         ball.dx *= -1
-        ball.dx *= 1.05
-        ball.dy *= 1.05
-    elif (ball.dx < 0) and (-350 < ball.xcor() < -340) and (paddle_a.ycor() + 65 > ball.ycor() > paddle_a.ycor() - 65):
+        ball.dx *= 1.1
+        ball.dy *= 1.1
+
+    elif (ball.dx < 0) and (-350 < ball.xcor() < -340) and (paddle_a.ycor() + 50 > ball.ycor() > paddle_a.ycor() - 50):
         ball.color("red")
         ball.dx *= -1
-        ball.dx *= 1.05  
-        ball.dy *= 1.05
+        ball.dx *= 1.1  
+        ball.dy *= 1.1
 
     def predict_ball_position(ball):
     # Calculate how much the ball will move horizontally until it reaches the paddle
@@ -239,20 +245,19 @@ while True:
 
         return future_ball_y
         
-
         # AI Player
     if ball.dx > 0:  # ball is moving towards paddle B
         future_ball_y = predict_ball_position(ball)
         if paddle_b.ycor() < future_ball_y and paddle_b.ycor() < 250:  # Add boundary condition
-            paddle_b.sety(paddle_b.ycor() + 8)
+            paddle_b.sety(paddle_b.ycor() + 10)
         elif paddle_b.ycor() > future_ball_y and paddle_b.ycor() > -250:  # Add boundary condition
-            paddle_b.sety(paddle_b.ycor() - 8)
+            paddle_b.sety(paddle_b.ycor() - 10)
     elif ball.dx < 0:  # ball is moving towards paddle A
         future_ball_y = predict_ball_position(ball)
         if paddle_a.ycor() < future_ball_y and paddle_a.ycor() < 250:  # Add boundary condition
-            paddle_a.sety(paddle_a.ycor() + 8)
+            paddle_a.sety(paddle_a.ycor() + 10)
         elif paddle_a.ycor() > future_ball_y and paddle_a.ycor() > -250:  # Add boundary condition
-            paddle_a.sety(paddle_a.ycor() - 8)
+            paddle_a.sety(paddle_a.ycor() - 10)
 
     # Missed ball paddle_b
     if ball.xcor() > 390:
@@ -280,6 +285,7 @@ while True:
         ball.dx *= 0
         ball.dy *= 0
 
+    
 
 
 
